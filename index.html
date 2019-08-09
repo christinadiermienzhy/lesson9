@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>
+		
+	</title>
+</head>
+<body>
+	<script type="text/javascript">
+		var setStringToArray = function setStringToArrayFunction ( arrInput ) {
+			var arr=[];
+			var accum='';
+			for ( var i=0; i <= arrInput.length; i++ ) {
+				if (( typeof (+arrInput.charAt(i)) === 'number') && (arrInput.charAt(i)) !== (',') && (i<arrInput.length)){
+					accum += arrInput.charAt(i);
+				} else if ((arrInput.charAt(i)) === (',')){
+					arr.push (+accum);
+					accum ='';
+				} else if (i === arrInput.length){
+					accum += arrInput.charAt(i);
+					arr.push (+accum);
+				}
+			}
+			return arr;
+		}
+
+		console.log ( setStringToArray ( '243,17,8,11111,542' ) ) ;
+
+
+		var notification = [
+		{
+			date: '11/07/2019',
+			msg: 'Some message here 11/07/2019'
+		},
+		{
+			date: '15/07/2019',
+			msg: 'Some message here 15/07/2019'
+		},
+		{
+			date: '29/07/2019',
+			msg: 'Some message here 29/07/2019'
+		},
+		{
+			date: '29/07/2019',
+			msg: 'Some message here 29/07/2019'
+		}
+		]
+
+//для ситуаций когда в массиве уже объекты отсортирован по датам
+		function group (data){
+			return data.reduce (function(result, item){
+			if (!result.length || result[result.length-1].title !== item.date){ //проверяем что массив пустой, или что в  массиве нет объекта с  аналогичной датой
+				var arr=[];
+				arr.push (item.msg);
+				 var obj= {   // создаем новый объект (для результирующего массива) и сохраняем в него преобразованные значения из инпута
+				 	title: item.date,
+				 	notifications: arr
+				 };
+				 result.push(obj);
+			} else {
+				result[result.length-1].notifications.push(item.msg);
+			}
+			return result;
+		},[]);
+		}
+		console.log(group(notification));
+//для ситуаций когда в массиве уже объекты не отсортирован по датам
+		var notificationUnsorted = [
+		{
+			date: '31/07/2019',
+			msg: 'Some message here 31/07/2019'
+		},
+		{
+			date: '30/07/2019',
+			msg: 'Some message here 30/07/2019'
+		},
+		{
+			date: '29/07/2019',
+			msg: 'Some message here 29/07/2019'
+		},
+		{
+			date: '29/07/2019',
+			msg: 'Some message here 29/07/2019'
+		},
+		{
+			date: '31/07/2019',
+			msg: 'Some message here 31/07/2019'
+		},
+		{
+			date: '30/07/2019',
+			msg: 'Some message here 30/07/2019'
+		},
+		{
+			date: '31/07/2019',
+			msg: 'Some message here 31/07/2019'
+		}
+		]
+
+		function groupUnSorted (data) {
+			return data.reduce ( function (result, item) {
+				var theSameItem = result.find (function (resultElement) {
+					return resultElement.title === item.date;
+				});
+			if (!result.length || typeof theSameItem !=='object') { 
+				var arr=[];
+				arr.push(item.msg);
+				var obj= {
+				 	title: item.date,
+				 	notifications: arr
+				 };
+				 result.push(obj);
+			} else {
+				theSameItem.notifications.push(item.msg);
+			}
+			return result;
+		},[]);
+		}
+		console.log ( groupUnSorted (notificationUnsorted));
+	</script>
+</body>
+</html>
